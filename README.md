@@ -14,6 +14,8 @@ irm bit.ly/Get-FileList|iex; Get-FileList
 irm bit.ly/Get-FileList|iex; Get-FileList 'C:\Work'
 # 檔案大小自動進位
 irm bit.ly/Get-FileList|iex; Get-FileList -AutoCarry 'C:\Work'
+# 檔案大小進位位數
+irm bit.ly/Get-FileList|iex; Get-FileList -Digit 0
 
 # 獲取特定檔名
 irm bit.ly/Get-FileList|iex; Get-FileList -Include:@('*.txt', '*.md') 'C:\Work'
