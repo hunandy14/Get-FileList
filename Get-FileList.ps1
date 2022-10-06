@@ -28,7 +28,7 @@ function Get-FileList {
         [Parameter(Position = 0, ParameterSetName = "")]
         [string] $Path = (Get-Location),
         [Parameter(ParameterSetName = "")]
-        [double] $Digit=0,
+        [double] $Digit=3,
         [switch] $AutoCarry,
         [object] $Include,
         [object] $Exclude,
