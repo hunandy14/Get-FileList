@@ -4,7 +4,7 @@ function FormatCapacity {
         [Parameter(Position = 0, ParameterSetName = "")]
         [double] $Value=0,
         [Parameter(Position = 1, ParameterSetName = "")]
-        [double] $Digit=1, 
+        [double] $Digit=1,
         [switch] $KB
     )
     # 設定單位
@@ -28,7 +28,7 @@ function Get-FileList {
         [Parameter(Position = 0, ParameterSetName = "")]
         [string] $Path = (Get-Location),
         [Parameter(ParameterSetName = "")]
-        [double] $Digit=0, 
+        [double] $Digit=0,
         [switch] $AutoCarry,
         [object] $Include,
         [object] $Exclude,
@@ -44,24 +44,24 @@ function Get-FileList {
     if ($NoMatch) { $List=$List -notmatch $NoMatch }
     # 格式化輸出
     Set-Location $Path
-    if ($FullName) {
-        $List|Format-Table `
-        @{Name='File'; Expression={$_.FullName}},`
-        @{Name='Size'; Expression={FormatCapacity $_.Length $Digit -KB:(!$AutoCarry)}; align='right'},`
-        LastWriteTime  
-    } elseif ($FullPath) {
-        $List|Format-Table `
-        @{Name='File'; Expression={$_.FullName|Resolve-Path -Relative}},`
-        @{Name='Size'; Expression={FormatCapacity $_.Length $Digit -KB:(!$AutoCarry)}; align='right'},`
-        LastWriteTime
-    } else {
-        $List|Format-Table `
-        @{Name='ResolvePath'; Expression={($_.Directory|Resolve-Path -Relative)-replace'^..\\(.*)', '.\' }},`
-        @{Name='Name'; Expression={$_.Name}},`
-        @{Name='Size'; Expression={FormatCapacity $_.Length $Digit -KB:(!$AutoCarry)}; align='right'},`
-        LastWriteTime
+    if ($FullName) { $Property=
+        @{Name='LastWriteTime'; Expression={$_.LastWriteTime}},
+        @{Name='Size'; Expression={FormatCapacity $_.Length $Digit -KB:(!$AutoCarry)}; align='right'},
+        @{Name='File'; Expression={$_.FullName}}
+    } elseif ($FullPath) { $Property=
+        @{Name='LastWriteTime'; Expression={$_.LastWriteTime}},
+        @{Name='Size'; Expression={FormatCapacity $_.Length $Digit -KB:(!$AutoCarry)}; align='right';},
+        @{Name='File'; Expression={$_.FullName|Resolve-Path -Relative}}
+    } else { $Property=
+        @{Name='LastWriteTime'; Expression={$_.LastWriteTime}},
+        @{Name='Size'; Expression={FormatCapacity $_.Length $Digit -KB:(!$AutoCarry)}; align='right'},
+        @{Name='ResolvePath'; Expression={($_.Directory|Resolve-Path -Relative)-replace'^..\\(.*)', '.\' }},
+        @{Name='Name'; Expression={$_.Name}}
     }
+    $List|Format-Table -Property:$Property
     Set-Location $CurrPath
 } # Get-FileList -AutoCarry
 # Get-FileList "C:\Users\hunan\OneDrive\Git Repository\pwshApp" -Include:@('*.txt', '*.md') -Exclude:@('README*') -NoMatch:'hita_html'
 # Get-FileList 'Z:\uniqlo' -AutoCarry -FullName
+# Get-FileList 'Z:\uniqlo' -AutoCarry -FullPath
+# Get-FileList 'Z:\uniqlo' -AutoCarry
