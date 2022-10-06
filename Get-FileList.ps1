@@ -64,4 +64,4 @@ function Get-FileList {
     Set-Location $CurrPath
 } # Get-FileList -AutoCarry
 # Get-FileList "C:\Users\hunan\OneDrive\Git Repository\pwshApp" -Include:@('*.txt', '*.md') -Exclude:@('README*') -NoMatch:'hita_html'
-Get-FileList 'Z:\uniqlo' -AutoCarry -FullName
+# Get-FileList 'Z:\uniqlo' -AutoCarry -FullName
