@@ -26,17 +26,19 @@ function FormatCapacity {
 function Get-FileList {
     param (
         [Parameter(Position = 0, ParameterSetName = "")]
-        [String] $Path = (Get-Location),
+        [string] $Path = (Get-Location),
         [Parameter(ParameterSetName = "")]
         [double] $Digit=0, 
         [switch] $AutoCarry,
-        [string] $Include,
-        [string] $Exclude
+        [object] $Include,
+        [object] $Exclude,
+        [string] $NoMatch
     )
     # 儲存當前路徑
     $CurrPath = Get-Location
     # 獲取檔案
     $List = (Get-ChildItem -Recurse -File $Path -Include:$Include -Exclude:$Exclude)
+    if ($NoMatch) { $List=$List -notmatch $NoMatch }
     # 格式化輸出
     Set-Location $Path
     $List|Format-Table `
@@ -46,4 +48,5 @@ function Get-FileList {
         @{Name='Size'; Expression={FormatCapacity $_.Length $Digit -KB:(!$AutoCarry)}; align='right'},`
         LastWriteTime
     Set-Location $CurrPath
-} # Get-FileList "C:\Users\hunan\OneDrive\Git Repository\pwshApp"
+} # Get-FileList -AutoCarry
+# Get-FileList "C:\Users\hunan\OneDrive\Git Repository\pwshApp" -Include:@('*.txt', '*.md') -Exclude:@('README*') -NoMatch:'hita_html'
