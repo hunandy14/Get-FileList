@@ -32,7 +32,10 @@ function Get-FileList {
         [switch] $AutoCarry,
         [object] $Include,
         [object] $Exclude,
-        [string] $NoMatch
+        [string] $NoMatch,
+        
+        [switch] $FullName,
+        [switch] $FullPath
     )
     # 儲存當前路徑
     $CurrPath = Get-Location
@@ -41,12 +44,24 @@ function Get-FileList {
     if ($NoMatch) { $List=$List -notmatch $NoMatch }
     # 格式化輸出
     Set-Location $Path
-    $List|Format-Table `
-        @{Name='ResolvePath'; Expression={($_.Directory|Resolve-Path -Relative)-replace'^..\\(.*)', '.\' }},`
-        @{Name='Name'; Expression={$_.Name}},`
-        # @{Name='Full'; Expression={$_.FullName|Resolve-Path -Relative}},`
+    if ($FullName) {
+        $List|Format-Table `
+        @{Name='File'; Expression={$_.FullName}},`
+        @{Name='Size'; Expression={FormatCapacity $_.Length $Digit -KB:(!$AutoCarry)}; align='right'},`
+        LastWriteTime  
+    } elseif ($FullPath) {
+        $List|Format-Table `
+        @{Name='File'; Expression={$_.FullName|Resolve-Path -Relative}},`
         @{Name='Size'; Expression={FormatCapacity $_.Length $Digit -KB:(!$AutoCarry)}; align='right'},`
         LastWriteTime
+    } else {
+        $List|Format-Table `
+        @{Name='ResolvePath'; Expression={($_.Directory|Resolve-Path -Relative)-replace'^..\\(.*)', '.\' }},`
+        @{Name='Name'; Expression={$_.Name}},`
+        @{Name='Size'; Expression={FormatCapacity $_.Length $Digit -KB:(!$AutoCarry)}; align='right'},`
+        LastWriteTime
+    }
     Set-Location $CurrPath
 } # Get-FileList -AutoCarry
 # Get-FileList "C:\Users\hunan\OneDrive\Git Repository\pwshApp" -Include:@('*.txt', '*.md') -Exclude:@('README*') -NoMatch:'hita_html'
+Get-FileList 'Z:\uniqlo' -AutoCarry -FullName
