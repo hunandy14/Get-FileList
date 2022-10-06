@@ -19,7 +19,12 @@ irm bit.ly/Get-FileList|iex; Get-FileList -AutoCarry 'C:\Work'
 irm bit.ly/Get-FileList|iex; Get-FileList -Include:@('*.txt', '*.md') 'C:\Work'
 # 排除特定檔名
 irm bit.ly/Get-FileList|iex; Get-FileList -Exclude:@('README*') 'C:\Work'
-
 # 排除特定路徑 (輸入是正則, 有符號記得加入標記符號)
 irm bit.ly/Get-FileList|iex; Get-FileList -NoMatch:"dirName1|dirName2" 'C:\Work'
+
+# 完整路徑 (預設把路徑跟檔名分開了)
+irm bit.ly/Get-FileList|iex; Get-FileList -FullPath
+# 完整名稱 (絕對路徑)
+irm bit.ly/Get-FileList|iex; Get-FileList -FullName
+
 ```
