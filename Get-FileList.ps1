@@ -30,7 +30,7 @@ function Get-FileList {
         [Parameter(ParameterSetName = "")]
         [double] $Digit=3,
         [switch] $AutoCarry,
-        [object] $Include,
+        [object] $Include = "@(*.*)",
         [object] $Exclude,
         [string] $NoMatch,
         
