@@ -35,8 +35,12 @@ function Get-FileList {
         [string] $NoMatch,
         
         [switch] $FullName,
-        [switch] $FullPath
+        [switch] $FullPath,
+        [switch] $Help
     )
+    if ($Help) {
+        explorer 'https://github.com/hunandy14/Get-FileList'
+    }
     # 儲存當前路徑
     $CurrPath = Get-Location
     # 獲取檔案
